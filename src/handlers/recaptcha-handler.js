@@ -138,10 +138,14 @@ export default class RecaptchaHandler extends FormEventHandler {
     const recaptchaInput = this.field.input
     if (recaptchaInput) {
       // Get a recaptcha token
-      const token = await window.grecaptcha.execute(this.recaptchaHandle)
+      try {
+        const token = await window.grecaptcha.execute(this.recaptchaHandle)
 
-      // Append the recaptcha token to the form
-      recaptchaInput.value = token
+        // Append the recaptcha token to the form
+        recaptchaInput.value = token
+      } catch (error) {
+        console.error(error)
+      }
 
       // Reset the recaptcha field value on a timeout, to ensure double submissions
       // don't cause errors
