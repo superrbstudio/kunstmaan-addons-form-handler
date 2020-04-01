@@ -56,6 +56,8 @@ export default class FormField {
      * @param {Event} event
      */
     const callback = event => {
+      this.removeError()
+
       this.onChangeHandlers.forEach(handler => {
         handler(this, event)
       })
