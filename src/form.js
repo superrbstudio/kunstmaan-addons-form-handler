@@ -1,10 +1,11 @@
-import { LiveNodeList } from 'live-node-list'
+import { LiveNodeList, LiveElement } from 'live-node-list'
 import { bind } from 'decko'
 import messagingService from '@superrb/kunstmaan-addons-messaging-service'
 import FormField from './field'
 import FormEventHandler from './form-event-handler'
 import Turbolinks from 'turbolinks'
 import RecaptchaHandler from './handlers/recaptcha-handler'
+import errorHandler from './service/error-handler'
 
 /**
  * @type {string}
@@ -20,7 +21,7 @@ export default class Form {
   ]
 
   /**
-   * @type {object}
+   * @type {Field[]}
    */
   fields = {}
 
@@ -60,6 +61,11 @@ export default class Form {
      * @type {LiveNodeList}
      */
     this.buttons = new LiveNodeList('.button', this.element)
+
+    /**
+     * @type {LiveElement}
+     */
+    this.errorMessage = new LiveElement('.message--error', this.element)
 
     this.constructor.customHandlers.forEach(handler => {
       if (handler.formName in this.fields) {
@@ -219,7 +225,13 @@ export default class Form {
     }
 
     Object.keys(errors).forEach(field => {
-      if (field === this.element.name || field === '.') {
+      if (field === this.element.name) {
+        this.setError(errors[field])
+
+        return
+      }
+
+      if (field === '.') {
         messagingService.error(errors[field], 5000)
 
         return
@@ -237,8 +249,23 @@ export default class Form {
    *
    */
   clearErrors() {
+    this.removeError()
     messagingService.closeAll()
     Object.keys(this.fields).forEach(name => this.fields[name].removeError())
+  }
+
+  /**
+   * @param {string} message
+   */
+  setError(message) {
+    errorHandler.setError(this, message)
+  }
+
+  /**
+   *
+   */
+  removeError() {
+    errorHandler.removeError(this)
   }
 
   /**

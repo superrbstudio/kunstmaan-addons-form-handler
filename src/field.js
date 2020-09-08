@@ -1,6 +1,7 @@
 import { LiveNodeList, LiveElement } from 'live-node-list'
 import { bind } from 'decko'
 import Form from './form'
+import errorHandler from './service/error-handler'
 
 export default class FormField {
   /**
@@ -73,29 +74,14 @@ export default class FormField {
    * @param {string} message
    */
   setError(message) {
-    this.element.classList.add('form-group--has-error')
-
-    if (this.errorMessage.item) {
-      this.errorMessage.item.innerHTML = message
-      return
-    }
-
-    const errorMessage = document.createElement('span')
-    errorMessage.classList.add('message')
-    errorMessage.classList.add('message--error')
-    errorMessage.innerHTML = message
-    this.element.append(errorMessage)
+    errorHandler.setError(this, message)
   }
 
   /**
    *
    */
   removeError() {
-    this.element.classList.remove('form-group--has-error')
-
-    if (this.errorMessage.item && this.errorMessage.item.parentNode) {
-      this.errorMessage.item.parentNode.removeChild(this.errorMessage.item)
-    }
+    errorHandler.removeError(this)
   }
 
   /**
