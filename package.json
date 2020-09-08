@@ -13,7 +13,7 @@
   "author": "@molovo",
   "license": "MIT",
   "dependencies": {
-    "@superrb/kunstmaan-addons-messaging-service": "^1.0.1",
+    "@superrb/kunstmaan-addons-messaging-service": "^1.0.2",
     "decko": "^1.2.0",
     "live-node-list": "^2.0.0-8",
     "recaptcha-v3": "^1.7.2",
