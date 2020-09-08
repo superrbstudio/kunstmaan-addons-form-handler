@@ -1,19 +1,19 @@
 {
   "name": "@superrb/kunstmaan-addons-form-handler",
   "version": "1.0.2",
-  "description": "JS form handling for use with https://gitlab.superrb.com/kuma/kunstmaan-addons",
+  "description": "JS form handling for use with https://github.com/superrbstudio/kunstmaan-addons",
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src --out-dir lib --source-maps"
   },
   "repository": {
     "type": "git",
-    "url": "https://gitlab.superrb.com/kuma/kunstmaan-addons-form-handler"
+    "url": "https://github.com/superrbstudio/kunstmaan-addons-form-handler"
   },
   "author": "@molovo",
   "license": "MIT",
   "dependencies": {
-    "@superrb/kunstmaan-addons-messaging-service": "^1.0.0",
+    "@superrb/kunstmaan-addons-messaging-service": "^1.0.1",
     "decko": "^1.2.0",
     "live-node-list": "^2.0.0-8",
     "recaptcha-v3": "^1.7.2",
