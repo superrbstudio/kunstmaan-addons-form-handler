@@ -107,7 +107,9 @@ export default class Form {
    */
   @bind
   async handleSubmit (event) {
-    event.preventDefault()
+    if (event) {
+      event.preventDefault()
+    }
 
     this.disableButtons()
 
