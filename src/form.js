@@ -60,7 +60,7 @@ export default class Form {
     /**
      * @type {LiveNodeList}
      */
-    this.buttons = new LiveNodeList('.button', this.element)
+    this.buttons = new LiveNodeList('.button[type="submit"], input[type="submit"]', this.element)
 
     /**
      * @type {LiveElement}
