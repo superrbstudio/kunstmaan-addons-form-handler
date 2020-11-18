@@ -33,14 +33,14 @@ export default class Form {
   /**
    * @return {FormData}
    */
-  get data() {
+  get data () {
     return new FormData(this.element)
   }
 
   /**
    * @param {HTMLFormElement} element
    */
-  constructor(element) {
+  constructor (element) {
     /**
      * @type {HTMLFormElement} element
      */
@@ -87,7 +87,7 @@ export default class Form {
   /**
    *
    */
-  registerListeners() {
+  registerListeners () {
     this.fieldNodeList.on('update', (newItems, oldItems) => {
       oldItems.forEach(this.removeField)
       newItems.forEach(this.addField)
@@ -106,7 +106,7 @@ export default class Form {
    * @param {Event} event
    */
   @bind
-  async handleSubmit(event) {
+  async handleSubmit (event) {
     event.preventDefault()
 
     this.disableButtons()
@@ -182,7 +182,7 @@ export default class Form {
    * @return {string|null}
    */
   @bind
-  getFieldName(field) {
+  getFieldName (field) {
     let name = field.name
     if (field.dataset.name) {
       name = field.dataset.name.replace(`${this.element.name}_`, '')
@@ -195,7 +195,7 @@ export default class Form {
    * @param {HTMLElement} field
    */
   @bind
-  addField(field) {
+  addField (field) {
     const name = this.getFieldName(field)
 
     if (name) {
@@ -207,7 +207,7 @@ export default class Form {
    * @param {HTMLElement} field
    */
   @bind
-  removeField(field) {
+  removeField (field) {
     const name = this.getFieldName(field)
 
     if (name) {
@@ -219,7 +219,7 @@ export default class Form {
    * @param {object} errors
    */
   @bind
-  setErrors(errors) {
+  setErrors (errors) {
     if (!errors || typeof errors !== 'object') {
       return
     }
@@ -248,7 +248,7 @@ export default class Form {
   /**
    *
    */
-  clearErrors() {
+  clearErrors () {
     this.removeError()
     messagingService.closeAll()
     Object.keys(this.fields).forEach(name => this.fields[name].removeError())
@@ -257,21 +257,21 @@ export default class Form {
   /**
    * @param {string} message
    */
-  setError(message) {
+  setError (message) {
     errorHandler.setError(this, message)
   }
 
   /**
    *
    */
-  removeError() {
+  removeError () {
     errorHandler.removeError(this)
   }
 
   /**
    *
    */
-  disableButtons() {
+  disableButtons () {
     this.buttons.forEach(button => {
       button.classList.add('button--loading')
     })
@@ -280,7 +280,7 @@ export default class Form {
   /**
    *
    */
-  enableButtons() {
+  enableButtons () {
     this.buttons.forEach(button => {
       button.classList.remove('button--loading')
     })
