@@ -1,6 +1,6 @@
 {
   "name": "@superrb/kunstmaan-addons-form-handler",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "JS form handling for use with https://github.com/superrbstudio/kunstmaan-addons",
   "main": "lib/index.js",
   "scripts": {
