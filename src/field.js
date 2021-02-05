@@ -12,7 +12,7 @@ export default class FormField {
   /**
    * @type {HTMLInputElement}
    */
-  get input() {
+  get input () {
     if (this.inputs.items.length === 0) {
       return null
     }
@@ -24,7 +24,7 @@ export default class FormField {
    * @param {Form} form
    * @param {HTMLElement} element
    */
-  constructor(form, element) {
+  constructor (form, element) {
     /**
      * @type {Form}
      */
@@ -52,7 +52,7 @@ export default class FormField {
   /**
    *
    */
-  registerListeners() {
+  registerListeners () {
     /**
      * @param {Event} event
      */
@@ -73,21 +73,21 @@ export default class FormField {
   /**
    * @param {string} message
    */
-  setError(message) {
+  setError (message) {
     errorHandler.setError(this, message)
   }
 
   /**
    *
    */
-  removeError() {
+  removeError () {
     errorHandler.removeError(this)
   }
 
   /**
    * @param {Function} callback
    */
-  onChange(callback) {
+  onChange (callback) {
     this.onChangeHandlers.push(callback)
     callback(this)
   }
@@ -95,23 +95,42 @@ export default class FormField {
   /**
    *
    */
-  setupDependencies() {
+  setupDependencies () {
     if (!('dependsOn' in this.element.dataset)) {
       return
     }
 
-    const dependencies = JSON.parse(this.element.dataset.dependsOn)
+    this.dependencies = JSON.parse(this.element.dataset.dependsOn)
 
-    Object.keys(dependencies).forEach(name => {
-      const value = dependencies[name]
+    for (const name in this.dependencies) {
+      const value = this.dependencies[name]
       const dependency = this.form.fields[name]
 
       if (!dependency) {
         return
       }
 
-      dependency.onChange(this.checkValue.bind(this, value))
-    })
+      dependency.onChange(this.checkValues)
+    }
+  }
+
+  /**
+   *
+   */
+  @bind
+  checkValues () {
+    for (const name in this.dependencies) {
+      const value = this.dependencies[name]
+      const dependency = this.form.fields[name]
+      const valid = this.checkValue(value, dependency)
+
+      if (!valid) {
+        this.hide()
+        return
+      }
+    }
+
+    this.show()
   }
 
   /**
@@ -122,7 +141,7 @@ export default class FormField {
    * @return {boolean}
    */
   @bind
-  checkValue(value, field, event = null) {
+  checkValue (value, field, event = null) {
     const input = field.input
     if (!input) {
       return false
@@ -131,11 +150,9 @@ export default class FormField {
     if (['checkbox', 'radio'].includes(input.type)) {
       if (typeof value === 'boolean') {
         if ((value === true && input.checked) || (value === false && !input.checked)) {
-          this.show()
           return true
         }
 
-        this.hide()
         return false
       }
 
@@ -145,21 +162,17 @@ export default class FormField {
         }).shift()
 
         if (checked) {
-          this.show()
           return true
         }
 
-        this.hide()
         return false
       }
     }
 
     if (input.value === value) {
-      this.show()
       return true
     }
 
-    this.hide()
     return false
   }
 
@@ -167,7 +180,7 @@ export default class FormField {
    *
    */
   @bind
-  show() {
+  show () {
     this.element.setAttribute('aria-hidden', 'false')
   }
 
@@ -175,7 +188,7 @@ export default class FormField {
    *
    */
   @bind
-  hide() {
+  hide () {
     this.element.setAttribute('aria-hidden', 'true')
 
     if (['checkbox', 'radio'].includes(this.input.type)) {
