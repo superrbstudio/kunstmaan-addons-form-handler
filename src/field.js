@@ -196,7 +196,7 @@ export default class FormField {
         input.checked = false
       })
     } else {
-      this.input.value = null
+      this.input.value = this.input.dataset.defaultValue || null
     }
   }
 }
