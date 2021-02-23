@@ -192,6 +192,7 @@ export default class FormField {
   @bind
   show () {
     this.element.setAttribute('aria-hidden', 'false')
+    this.element.novalidate = true
   }
 
   /**
@@ -200,6 +201,7 @@ export default class FormField {
   @bind
   hide () {
     this.element.setAttribute('aria-hidden', 'true')
+    this.element.novalidate = true
 
     if (['checkbox', 'radio'].includes(this.input.type)) {
       this.inputs.forEach(input => {
