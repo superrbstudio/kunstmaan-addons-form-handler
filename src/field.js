@@ -36,6 +36,16 @@ export default class FormField {
     this.element = element
 
     /**
+     * @type {Field|null}
+     */
+    this.parent = null
+    const parent = this.element.parentNode.closest('.form-group[data-name]')
+    if (parent) {
+      const name = this.form.getFieldName(parent)
+      this.parent = this.form.fields[name]
+    }
+
+    /**
      * @type {LiveNodeList}
      */
     this.inputs = new LiveNodeList('input, textarea, select', this.element)
