@@ -192,7 +192,7 @@ export default class FormField {
   @bind
   show () {
     this.element.setAttribute('aria-hidden', 'false')
-    this.element.novalidate = true
+    this.element.novalidate = false
   }
 
   /**
