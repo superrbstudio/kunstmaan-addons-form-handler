@@ -6,6 +6,7 @@ import FormEventHandler from './form-event-handler'
 import Turbolinks from 'turbolinks'
 import RecaptchaHandler from './handlers/recaptcha-handler'
 import errorHandler from './service/error-handler'
+import { scrollToElement } from './helpers'
 
 /**
  * @type {string}
@@ -245,6 +246,8 @@ export default class Form {
         this.fields[name].setError(errors[field])
       }
     })
+
+    scrollToElement(this.element.querySelector('.form-group--has-error'), 500)
   }
 
   /**
