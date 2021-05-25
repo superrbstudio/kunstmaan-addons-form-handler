@@ -6,7 +6,7 @@ export default class FormEventHandler {
    * @param {Form} form
    * @param {Field} field
    */
-  constructor (form, field) {
+  constructor (form, field = null) {
     /**
      * @type {Form}
      */

@@ -73,12 +73,20 @@ export default class Form {
         this.handlers[handler.handlerName] = new handler(this, this.fields[handler.formName])
       }
 
+      if (handler.formName === this.name) {
+        this.handlers[handler.handlerName] = new handler(this)
+      }
+
       if ('formNameRegex' in handler) {
         Object.keys(this.fields).forEach(name => {
           if (name.match(handler.formNameRegex)) {
             this.handlers[handler.handlerName] = new handler(this, this.fields[name])
           }
         })
+
+        if (this.name.match(handler.formNameRegex)) {
+          this.handlers[handler.handlerName] = new handler(this)
+        }
       }
     })
 
