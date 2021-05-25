@@ -144,7 +144,14 @@ export default class Form {
       const data = await response.json()
 
       if (data.action_required) {
-        const handled = await Promise.all(Object.keys(this.handlers).map(name => this.handlers[name].handleAction(data.action_required)))
+        let handled = await Promise.all(Object.keys(this.handlers).map(name => this.handlers[name].handleAction(data.action_required)))
+        handled = handled.reduce((previous, current) => {
+          if (current === false) {
+            return false
+          }
+
+          return previous
+        }, true)
 
         // If action was handled, resubmit the form
         if (handled !== true) {
