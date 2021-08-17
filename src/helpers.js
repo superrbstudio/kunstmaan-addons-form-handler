@@ -169,6 +169,10 @@ export function animate (from, to, duration = 500, callback, easing = ease) {
  * @return {void}
  */
 export function scrollToElement (element, duration = 500, offset = 0) {
+  if (!element) {
+    return
+  }
+
   const from = window.pageYOffset
   const to = element.getBoundingClientRect().top + window.pageYOffset + offset
 

@@ -262,7 +262,10 @@ export default class Form {
       }
     })
 
-    scrollToElement(this.element.querySelector('.form-group--has-error'), 500)
+    const firstError = this.element.querySelector('.form-group--has-error')
+    if (firstError) {
+      scrollToElement(firstError, 500)
+    }
   }
 
   /**
