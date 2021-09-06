@@ -179,8 +179,12 @@ export default class Form {
       }
 
       if ('events' in data) {
-        data.events.forEach(eventName => {
-          document.dispatchEvent(new Event(eventName))
+        data.events.forEach(event => {
+          if (typeof event === 'string') {
+            return document.dispatchEvent(new CustomEvent(event))
+          }
+
+          document.dispatchEvent(new CustomEvent(event.name, { detail: event.data }))
         })
       }
 
