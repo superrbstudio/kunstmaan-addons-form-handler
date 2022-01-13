@@ -1,6 +1,7 @@
 import { LiveElement } from 'live-node-list'
 import { bind } from 'decko'
 import { load as loadRecaptcha } from 'recaptcha-v3'
+import { IReCaptchaInstance } from 'recaptcha-v3/dist/grecaptcha/grecaptcha'
 import FormEventHandler from '../form-event-handler'
 import Form from '../form'
 import FormField from '../field'
@@ -43,6 +44,11 @@ export default class RecaptchaHandler extends FormEventHandler {
   static visibleForms = []
 
   /**
+   * @type {IReCaptchaInstance}
+   */
+  static recaptchaHandle = null
+
+  /**
    * @param {Form} form
    * @param {FormField} field
    */
@@ -51,7 +57,11 @@ export default class RecaptchaHandler extends FormEventHandler {
 
     this.setupRecaptcha()
 
-    if (this.constructor.formName in this.form.fields && this.field && this.field.input) {
+    if (
+      this.constructor.formName in this.form.fields &&
+      this.field &&
+      this.field.input
+    ) {
       this.field.input.value = null
       this.registerListeners()
     }
@@ -62,14 +72,18 @@ export default class RecaptchaHandler extends FormEventHandler {
    */
   registerListeners() {
     document.addEventListener('validation:fail', e => {
-      if (this.constructor.formName in this.form.fields && this.field && this.field.input) {
+      if (
+        this.constructor.formName in this.form.fields &&
+        this.field &&
+        this.field.input
+      ) {
         this.field.input.value = null
       }
     })
 
     this.formObserver = new IntersectionObserver(this.checkFormVisibility, {
       trackVisibility: true,
-      delay: 500
+      delay: 500,
     })
     this.formObserver.observe(this.form.element)
   }
@@ -80,13 +94,18 @@ export default class RecaptchaHandler extends FormEventHandler {
     if (!this.constructor.loadStarted && !window.recaptcha) {
       this.constructor.loadStarted = true
 
-      window.recaptcha = await loadRecaptcha('explicit', { autoHideBadge: true })
-
-      this.recaptchaHandle = grecaptcha.render('recaptcha-container', {
-        sitekey: RECAPTCHA_KEY,
-        badge: 'inline', // must be inline
-        size: 'invisible' // must be invisible
+      window.recaptcha = await loadRecaptcha('explicit', {
+        autoHideBadge: true,
       })
+
+      this.constructor.recaptchaHandle = await window.grecaptcha.render(
+        'recaptcha-container',
+        {
+          sitekey: RECAPTCHA_KEY,
+          badge: 'inline', // must be inline
+          size: 'invisible', // must be invisible
+        },
+      )
     }
   }
 
@@ -102,14 +121,23 @@ export default class RecaptchaHandler extends FormEventHandler {
         }
       } else {
         if (this.constructor.visibleForms.includes(this.form)) {
-          this.constructor.visibleForms.splice(this.constructor.visibleForms.indexOf(this.form), 1)
+          this.constructor.visibleForms.splice(
+            this.constructor.visibleForms.indexOf(this.form),
+            1,
+          )
         }
       }
 
       if (this.constructor.visibleForms.length === 0) {
-        this.constructor.recaptchaMessage.item.setAttribute('aria-hidden', 'true')
+        this.constructor.recaptchaMessage.item.setAttribute(
+          'aria-hidden',
+          'true',
+        )
       } else {
-        this.constructor.recaptchaMessage.item.setAttribute('aria-hidden', 'false')
+        this.constructor.recaptchaMessage.item.setAttribute(
+          'aria-hidden',
+          'false',
+        )
       }
     })
   }
@@ -139,7 +167,9 @@ export default class RecaptchaHandler extends FormEventHandler {
     if (recaptchaInput) {
       // Get a recaptcha token
       try {
-        const token = await window.grecaptcha.execute(this.recaptchaHandle)
+        const token = await window.grecaptcha.execute(
+          this.constructor.recaptchaHandle,
+        )
 
         // Append the recaptcha token to the form
         recaptchaInput.value = token
